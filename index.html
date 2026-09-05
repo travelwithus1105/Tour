@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tour - Travel Website</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= LOGIN PAGE ================= -->
+
+<section id="loginPage" class="auth-page">
+
+    <div class="auth-container">
+
+        <div class="auth-image">
+            <div class="auth-overlay">
+                <h1>Tour<span>.</span></h1>
+                <p>Explore the world. Create unforgettable memories.</p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+
+            <div id="loginFormBox">
+
+                <h1>Welcome Back!</h1>
+
+                <p class="auth-subtitle">
+                    Login to continue your journey.
+                </p>
+
+                <form onsubmit="loginUser(event)">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        id="loginUsername"
+                        placeholder="Enter your username"
+                        required
+                    >
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+                    <button type="submit" class="auth-button">
+                        Login
+                    </button>
+
+                </form>
+
+                <p class="switch-auth">
+                    Don't have an account?
+                    <button type="button" onclick="showCreateAccount()">
+                        Create Account
+                    </button>
+                </p>
+
+            </div>
+
+
+            <!-- ================= CREATE ACCOUNT ================= -->
+
+            <div id="createAccountBox" class="hidden-auth">
+
+                <h1>Create Account</h1>
+
+                <p class="auth-subtitle">
+                    Create your Tour account.
+                </p>
+
+                <form onsubmit="createAccount(event)">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        id="createUsername"
+                        placeholder="Create username"
+                        required
+                    >
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="createPassword"
+                        placeholder="Create password"
+                        required
+                    >
+
+                    <label>Confirm Password</label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password"
+                        required
+                    >
+
+                    <button type="submit" class="auth-button">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <p class="switch-auth">
+                    Already have an account?
+                    <button type="button" onclick="showLogin()">
+                        Login
+                    </button>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="nav-container">
+
+            <a href="#" class="logo" onclick="showPage('home')">
+                Tour<span>.</span>
+            </a>
+
+            <button class="menu-button" onclick="toggleMenu()">☰</button>
+
+            <nav id="navigation">
+
+                <a href="#" class="nav-link active" onclick="showPage('home')">
+                    Home
+                </a>
+
+                <div class="dropdown">
+
+                    <a href="#" class="nav-link" onclick="return false;">
+                        Explore ▾
+                    </a>
+
+                    <div class="dropdown-menu">
+
+                        <a href="#" onclick="showPage('destinations')">
+                            Destinations
+                        </a>
+
+                        <a href="#" onclick="showPage('packages')">
+                            Packages
+                        </a>
+
+                        <a href="#" onclick="showPage('bookings')">
+                            My Bookings
+                        </a>
+
+                        <a href="#" onclick="showPage('favorites')">
+                            My Favorites
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <a href="#" class="nav-link" onclick="showPage('services')">
+                    Services
+                </a>
+
+                <a href="#" class="nav-link" onclick="showPage('about')">
+                    About
+                </a>
+
+                <a href="#" class="nav-link" onclick="showPage('contact')">
+                    Contact Us
+                </a>
+
+                <button class="nav-icon-button" onclick="toggleDarkMode()" title="Dark Mode">
+                    🌙
+                </button>
+
+                <button class="logout-button" onclick="logoutUser()">
+    Logout
+</button>
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= HOME ================= -->
+
+    <section id="home" class="page active-page">
+
+        <div class="hero">
+
+            <div class="hero-container">
+
+                <div class="hero-content">
+
+                    <p class="hero-small">
+                        DISCOVER THE WORLD
+                    </p>
+
+                    <h1>
+                        Let's Enjoy Your
+                        <br>
+                        Trip In
+                        <span id="typing">San Francisco</span>
+                    </h1>
+
+                    <p class="hero-text">
+                        Discover beautiful destinations,
+                        explore new places and create
+                        unforgettable memories.
+                    </p>
+
+                    <div class="search-box">
+
+                        <div class="search-item">
+
+                            <select id="destination">
+
+                                <option value="">
+                                    Destination
+                                </option>
+
+                                <option value="Italy">Italy</option>
+                                <option value="Greece">Greece</option>
+                                <option value="Paris">Paris</option>
+                                <option value="Maldives">Maldives</option>
+                                <option value="Dubai">Dubai</option>
+                                <option value="Bali">Bali</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="search-item">
+
+                            <input type="date" id="date">
+
+                        </div>
+
+                        <div class="search-item">
+
+                            <input type="number" id="people" placeholder="# of People" min="1" value="1">
+
+                        </div>
+
+                        <div class="search-button-container">
+
+                            <button onclick="searchTrip()">
+                                Search
+                            </button>
+
+                            <label class="save-search">
+
+                                <input type="checkbox" id="saveSearch">
+
+                                Save this search
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="hero-image-container">
+
+                    <div class="hero-image">
+
+
+                        <img src="images/hero.jpg" alt="San Francisco">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICES -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                <p>OUR SERVICES</p>
+
+                <h2>We Provide Best Services</h2>
+
+                <span>
+                    Everything you need for a perfect
+                    travel experience.
+                </span>
+
+            </div>
+
+            <div class="services-grid">
+
+                <div class="service-card">
+                    <div class="service-icon">🏠</div>
+                    <h3>Beautiful Condo</h3>
+                    <p>
+                        Find beautiful and comfortable
+                        places to stay during your journey.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🍽️</div>
+                    <h3>Restaurants & Cafe</h3>
+                    <p>
+                        Enjoy delicious food and discover
+                        amazing local restaurants.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">✉️</div>
+                    <h3>Easy To Contact</h3>
+                    <p>
+                        Contact our travel team easily
+                        whenever you need assistance.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📞</div>
+                    <h3>24/7 Support</h3>
+                    <p>
+                        Get support whenever you need
+                        help during your trip.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COUNTERS -->
+
+        <div class="counter-section">
+
+            <div class="counter">
+                <h2>9313+</h2>
+                <p>Happy Travelers</p>
+            </div>
+
+            <div class="counter">
+                <h2>120+</h2>
+                <p>Destinations</p>
+            </div>
+
+            <div class="counter">
+                <h2>500+</h2>
+                <p>Tour Packages</p>
+            </div>
+
+            <div class="counter">
+                <h2>24/7</h2>
+                <p>Customer Support</p>
+            </div>
+
+        </div>
+
+
+        <!-- DESTINATIONS -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                <p>DESTINATIONS</p>
+
+                <h2>Popular Destinations</h2>
+
+            </div>
+
+            <div class="destination-grid">
+
+                <div class="destination-card">
+
+                    <img src="images/italy.jpg" alt="Italy">
+
+                    <div class="destination-info">
+
+                        <h3>Italy</h3>
+                        <p>Europe</p>
+
+                        <button onclick="openBooking('Italy',24999)">
+                            Book Now
+                        </button>
+
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Italy')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card">
+
+                    <img src="images/greece.jpg" alt="Greece">
+
+                    <div class="destination-info">
+
+                        <h3>Greece</h3>
+                        <p>Europe</p>
+
+                        <button onclick="openBooking('Greece',29999)">
+                            Book Now
+                        </button>
+
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Greece')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card">
+
+                    <img src="images/paris.jpg" alt="Paris">
+
+                    <div class="destination-info">
+
+                        <h3>Paris</h3>
+                        <p>France</p>
+
+                        <button onclick="openBooking('Paris',34999)">
+                            Book Now
+                        </button>
+
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Paris')">
+                        ♡
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="center-button">
+
+                <button onclick="showPage('destinations')">
+                    View All Destinations
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TESTIMONIAL -->
+
+        <div class="testimonial-section">
+
+            <div class="section-title">
+
+                <p>TESTIMONIALS</p>
+
+                <h2>What Our Travelers Say</h2>
+
+            </div>
+
+            <div class="testimonial">
+
+                <img src="images/traveler.jpg" alt="Traveler">
+
+                <h3>Adam Anderson</h3>
+
+                <div class="rating">
+                    ⭐⭐⭐⭐⭐
+                </div>
+
+                <p>
+                    "The entire trip was amazing.
+                    Everything was perfectly organized
+                    and the destinations were beautiful."
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DESTINATIONS PAGE ================= -->
+
+    <section id="destinations" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>EXPLORE THE WORLD</p>
+
+                <h1>Popular Destinations</h1>
+
+                <span>
+                    Explore some of the world's
+                    most beautiful destinations.
+                </span>
+
+            </div>
+
+            <div class="filter-bar">
+
+                <input type="text" id="destinationSearch" placeholder="🔍 Search destination..."
+                    onkeyup="filterDestinations()">
+
+                <select id="continentFilter" onchange="filterDestinations()">
+
+                    <option value="all">All Regions</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Middle East">Middle East</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="destination-grid big" id="destinationGrid">
+
+                <div class="destination-card" data-name="Italy" data-region="Europe">
+
+                    <img src="images/italy.jpg" alt="Italy">
+
+                    <div class="destination-info">
+                        <h3>Italy</h3>
+                        <p>Europe</p>
+                        <span class="price">₹24,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>ITALY10</strong></p>
+
+                        <button onclick="openBooking('Italy',24999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Italy')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card" data-name="Greece" data-region="Europe">
+
+                    <img src="images/greece.jpg" alt="Greece">
+
+                    <div class="destination-info">
+                        <h3>Greece</h3>
+                        <p>Europe</p>
+                        <span class="price">₹29,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>GREECE15</strong></p>
+                        <button onclick="openBooking('Greece',29999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Greece')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card" data-name="Paris" data-region="Europe">
+
+                    <img src="images/paris.jpg" alt="Paris">
+
+                    <div class="destination-info">
+                        <h3>Paris</h3>
+                        <p>Europe</p>
+                        <span class="price">₹34,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>PARIS20</strong></p>
+
+                        <button onclick="openBooking('Paris',34999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Paris')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card" data-name="Maldives" data-region="Asia">
+
+                    <img src="images/maldives.jpg" alt="Maldives">
+
+                    <div class="destination-info">
+                        <h3>Maldives</h3>
+                        <p>Asia</p>
+                        <span class="price">₹39,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>MALDIVES12</strong></p>
+                        <button onclick="openBooking('Maldives',39999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Maldives')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card" data-name="Dubai" data-region="Middle East">
+
+                    <img src="images/dubai.jpg" alt="Dubai">
+
+                    <div class="destination-info">
+                        <h3>Dubai</h3>
+                        <p>Middle East</p>
+                        <span class="price">₹29,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>DUBAI10</strong></p>
+
+                        <button onclick="openBooking('Dubai',29999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Dubai')">
+                        ♡
+                    </button>
+
+                </div>
+
+
+                <div class="destination-card" data-name="Bali" data-region="Asia">
+
+                    <img src="images/bali.jpg" alt="Bali">
+
+                    <div class="destination-info">
+                        <h3>Bali</h3>
+                        <p>Asia</p>
+                        <span class="price">₹27,999</span>
+                        <p class="coupon-code">🎟️ Coupon: <strong>BALI15</strong></p>
+
+                        <button onclick="openBooking('Bali',27999)">
+                            Book Now
+                        </button>
+                    </div>
+
+                    <button class="favorite-button" onclick="toggleFavorite(this,'Bali')">
+                        ♡
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= SERVICES ================= -->
+
+    <section id="services" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>WHAT WE OFFER</p>
+
+                <h1>Our Services</h1>
+
+                <span>
+                    We make your travel comfortable,
+                    simple and enjoyable.
+                </span>
+
+            </div>
+
+            <div class="services-grid big">
+
+                <div class="service-card">
+                    <div class="service-icon">✈️</div>
+                    <h3>Flight Booking</h3>
+                    <p>
+                        Easy and convenient flight
+                        booking for your journey.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🏨</div>
+                    <h3>Hotel Booking</h3>
+                    <p>
+                        Find comfortable hotels and
+                        resorts at your destination.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🚗</div>
+                    <h3>Transportation</h3>
+                    <p>
+                        Comfortable transportation
+                        during your entire trip.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🗺️</div>
+                    <h3>Tour Guide</h3>
+                    <p>
+                        Experienced guides to help
+                        you explore every destination.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎫</div>
+                    <h3>Tour Packages</h3>
+                    <p>
+                        Choose exciting packages
+                        according to your budget.
+                    </p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">📞</div>
+                    <h3>24/7 Support</h3>
+                    <p>
+                        Our support team is available
+                        whenever you need help.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PACKAGES ================= -->
+
+    <section id="packages" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>TRAVEL DEALS</p>
+
+                <h1>Tour Packages</h1>
+
+                <span>
+                    Choose the perfect package
+                    for your next adventure.
+                </span>
+
+            </div>
+
+            <div class="package-grid">
+
+                <div class="package-card">
+
+                    <h3>Weekend Trip</h3>
+
+                    <h2>₹9,999</h2>
+
+                    <p>2 Days / 1 Night</p>
+
+                    <hr>
+
+                    <p>✓ Hotel Stay</p>
+                    <p>✓ Breakfast</p>
+                    <p>✓ City Tour</p>
+                    <p>✓ Transportation</p>
+
+                    <button onclick="openBooking('Weekend Trip',9999)">
+                        Book Now
+                    </button>
+
+                </div>
+
+
+                <div class="package-card featured">
+
+                    <span class="popular">POPULAR</span>
+
+                    <h3>Premium Trip</h3>
+
+                    <h2>₹24,999</h2>
+
+                    <p>5 Days / 4 Nights</p>
+
+                    <hr>
+
+                    <p>✓ Luxury Hotel</p>
+                    <p>✓ Breakfast & Dinner</p>
+                    <p>✓ Guided Tour</p>
+                    <p>✓ Transportation</p>
+                    <p>✓ Airport Pickup</p>
+
+                    <button onclick="openBooking('Premium Trip',24999)">
+                        Book Now
+                    </button>
+
+                </div>
+
+
+                <div class="package-card">
+
+                    <h3>Luxury Trip</h3>
+
+                    <h2>₹49,999</h2>
+
+                    <p>7 Days / 6 Nights</p>
+
+                    <hr>
+
+                    <p>✓ 5 Star Hotel</p>
+                    <p>✓ All Meals</p>
+                    <p>✓ Private Guide</p>
+                    <p>✓ Private Transport</p>
+
+                    <button onclick="openBooking('Luxury Trip',49999)">
+                        Book Now
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= ABOUT ================= -->
+
+    <section id="about" class="page">
+
+        <div class="inner-page">
+
+            <div class="about">
+
+                <div class="about-image">
+
+                    <img src="images/Travels.jpg" alt="Travels">
+
+                </div>
+
+                <div class="about-content">
+
+                    <p>ABOUT US</p>
+
+                    <h1>
+                        We Make Your Travel
+                        Experience Amazing
+                    </h1>
+
+                    <p>
+                        Tour is a travel platform designed
+                        to help travelers discover beautiful
+                        destinations and create unforgettable
+                        memories.
+                    </p>
+
+                    <p>
+                        We provide travel planning,
+                        accommodation, transportation,
+                        tour packages and customer support.
+                    </p>
+
+                    <ul>
+                        <li>✓ Easy travel planning</li>
+                        <li>✓ Beautiful destinations</li>
+                        <li>✓ Affordable packages</li>
+                        <li>✓ 24/7 customer support</li>
+                    </ul>
+
+                    <button onclick="showPage('contact')">
+                        Contact Us
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CONTACT ================= -->
+
+    <section id="contact" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>GET IN TOUCH</p>
+
+                <h1>Contact Us</h1>
+
+                <span>
+                    We would love to hear from you.
+                </span>
+
+            </div>
+
+            <div class="contact">
+
+                <div class="contact-info">
+
+                    <h2>
+                        Let's Talk About
+                        Your Next Trip
+                    </h2>
+
+                    <p>
+                        Have questions about our
+                        destinations or packages?
+                        Contact us today.
+                    </p>
+
+                    <h4>📍 Address</h4>
+                    <p>Mumbai, Maharashtra, India</p>
+
+                    <h4>📞 Phone</h4>
+                    <p>+91 98765 43210</p>
+
+                    <h4>✉ Email</h4>
+                    <p>info@tourist.com</p>
+
+                </div>
+
+                <form class="contact-form" onsubmit="sendMessage(event)">
+
+                    <input id="name" type="text" placeholder="Your Name" required>
+
+                    <input id="email" type="email" placeholder="Your Email" required>
+
+                    <input type="text" placeholder="Subject" required>
+
+                    <textarea rows="6" placeholder="Your Message" required></textarea>
+
+                    <button type="submit">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= BOOKINGS ================= -->
+
+    <section id="bookings" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>YOUR TRAVEL</p>
+
+                <h1>My Bookings</h1>
+
+                <span>
+                    View your confirmed travel bookings.
+                </span>
+
+            </div>
+
+            <div id="bookingList" class="booking-list"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FAVORITES ================= -->
+
+    <section id="favorites" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>SAVED TRIPS</p>
+
+                <h1>My Favorites</h1>
+
+                <span>
+                    Destinations you have saved for later.
+                </span>
+
+            </div>
+
+            <div id="favoriteList" class="favorite-list"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= PAYMENT ================= -->
+
+    <section id="payment" class="page">
+
+        <div class="inner-page">
+
+            <div class="page-heading">
+
+                <p>SECURE CHECKOUT</p>
+
+                <h1>Complete Your Booking</h1>
+
+                <span>
+                    Review your trip and select
+                    your payment method.
+                </span>
+
+            </div>
+
+            <div class="checkout-container">
+
+                <div class="order-summary">
+
+                    <h2>Booking Summary</h2>
+
+                    <div class="summary-row">
+                        <span>Destination</span>
+                        <strong id="paymentDestination">-</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Package Price</span>
+                        <strong id="paymentPrice">₹0</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Number of People</span>
+                        <strong id="paymentPeople">1</strong>
+                    </div>
+
+
+                    <p id="couponHint" class="coupon-hint"></p>
+
+                    <div class="coupon-box">
+
+                        <input type="text" id="coupon" placeholder="Enter coupon code">
+
+                        <button onclick="applyCoupon()">
+                            Apply
+                        </button>
+
+                    </div>
+
+                    <p id="couponMessage" class="coupon-message"></p>
+
+                    <p id="couponMessage" class="coupon-message"></p>
+
+                    <div class="summary-row discount-row">
+
+                        <span>Discount</span>
+
+                        <strong id="paymentDiscount">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                    <div class="summary-total">
+
+                        <span>Total</span>
+
+                        <strong id="paymentTotal">
+                            ₹0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="payment-box">
+
+                    <h2>Payment Method</h2>
+
+                    <label class="payment-option">
+
+                        <input type="radio" name="payment" value="upi" checked onchange="changePaymentMethod()">
+
+                        <span>📱 UPI</span>
+
+                    </label>
+
+                    <label class="payment-option">
+
+                        <input type="radio" name="payment" value="card" onchange="changePaymentMethod()">
+
+                        <span>💳 Debit / Credit Card</span>
+
+                    </label>
+
+                    <label class="payment-option">
+
+                        <input type="radio" name="payment" value="netbanking" onchange="changePaymentMethod()">
+
+                        <span>🏦 Net Banking</span>
+
+                    </label>
+
+
+                    <div id="upiPayment" class="payment-details">
+
+                        <input type="text" placeholder="Enter UPI ID">
+
+                    </div>
+
+
+                    <div id="cardPayment" class="payment-details hidden">
+
+                        <input type="text" placeholder="Card Number" maxlength="16" inputmode="numeric">
+
+                        <div class="card-row">
+
+                            <input type="text" placeholder="MM/YY" maxlength="5">
+
+                            <input type="password" placeholder="CVV" maxlength="3">
+
+                        </div>
+
+                    </div>
+
+
+                    <div id="netbankingPayment" class="payment-details hidden">
+
+                        <select>
+
+                            <option value="">
+                                Select Bank
+                            </option>
+
+                            <option>State Bank of India</option>
+                            <option>HDFC Bank</option>
+                            <option>ICICI Bank</option>
+                            <option>Axis Bank</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button class="pay-button" onclick="processPayment()">
+
+                        🔒 Pay Securely
+
+                    </button>
+
+                    <p class="secure-text">
+                        🔐 Demo payment only — no real money is charged.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-content">
+
+            <div>
+
+                <h2>Tour<span>.</span></h2>
+
+                <p>
+                    Explore the world.
+                    Create memories.
+                </p>
+
+            </div>
+
+            <div>
+
+                <h3>Quick Links</h3>
+
+                <a onclick="showPage('home')">Home</a>
+                <a onclick="showPage('services')">Services</a>
+                <a onclick="showPage('destinations')">Destinations</a>
+                <a onclick="showPage('packages')">Packages</a>
+                <a onclick="showPage('bookings')">My Bookings</a>
+                <a onclick="showPage('favorites')">My Favorites</a>
+
+            </div>
+
+            <div>
+
+                <h3>Contact</h3>
+
+                <p>Mumbai, India</p>
+                <p>+91 98765 43210</p>
+                <p>info@tourist.com</p>
+
+            </div>
+
+        </div>
+
+        <div class="copyright">
+
+            © 2026 Tour. All Rights Reserved.
+
+        </div>
+
+    </footer>
+
+
+    <!-- ================= BOOKING MODAL ================= -->
+
+    <div id="bookingModal" class="modal">
+
+        <div class="modal-content">
+
+            <button class="close-modal" onclick="closeBooking()">
+                ×
+            </button>
+
+            <h2>Book Your Trip</h2>
+
+            <p id="selectedDestination">
+                Destination
+            </p>
+
+            <label>Travel Date</label>
+
+            <input type="date" id="bookingDate">
+
+            <label>Number of People</label>
+
+            <input type="number" id="bookingPeople" value="1" min="1" onchange="updateBookingPrice()">
+
+            <div class="booking-price">
+
+                <span>Total:</span>
+
+                <strong id="bookingPrice">
+                    ₹0
+                </strong>
+
+            </div>
+
+            <button class="continue-button" onclick="continueToPayment()">
+
+                Continue to Payment
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TOAST ================= -->
+
+    <div id="toast" class="toast">
+
+        <span id="toastMessage"></span>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
