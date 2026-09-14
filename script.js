@@ -677,21 +677,41 @@ function processPayment() {
     };
 
 
-    saveBooking(booking);
+   saveBooking(booking);
 
+const savedAccount =
+    localStorage.getItem("tourAccount");
 
-    showToast(
-        "Payment successful! Booking confirmed."
-    );
+if (savedAccount) {
 
+    const account =
+        JSON.parse(savedAccount);
 
-    setTimeout(function () {
+    const bookingMessage =
+        "BOOKING CONFIRMED!\n\n" +
+        "Booking ID: " + booking.id + "\n" +
+        "Destination: " + booking.destination + "\n" +
+        "Travel Date: " + booking.date + "\n" +
+        "Number of People: " + booking.people + "\n" +
+        "Payment Method: " + booking.paymentMethod + "\n" +
+        "Total Paid: ₹" + booking.total + "\n\n" +
+        "Your booking has been successfully confirmed.\n" +
+        "Thank you for booking with Tour!";
+
+    sendLoginSuccessEmail(account, bookingMessage);
+}
+
+showToast(
+    "Payment successful! Booking confirmed."
+);
+  setTimeout(function () {
 
         showPage("bookings");
 
         displayBookings();
 
     }, 1200);
+
 }
 
    /* =================  SAVE BOOKING ================= */
@@ -1512,26 +1532,55 @@ function showCreateAccount() {
 }
 
 
-/* ================= CREATE ACCOUNT ================= */
+
+// ================= EMAILJS SETTINGS =================
+
+const EMAILJS_SERVICE_ID = "service_7jhv9ql";
+
+const EMAILJS_OTP_TEMPLATE_ID = "template_vba4rkk";
+
+const EMAILJS_LOGIN_TEMPLATE_ID = "template_8nreytb";
+
+// Stores OTP temporarily
+let pendingOTP = "";
+
+// Stores account details until OTP verification
+let pendingAccount = null;
+
+// ================= GENERATE OTP =================
+
+function generateOTP() {
+
+    return Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
+
+}
+// ================= CREATE ACCOUNT =================
+
+
+// ================= CREATE ACCOUNT =================
 
 function createAccount(e) {
 
     e.preventDefault();
 
     const username =
-        document.getElementById("createUsername")
-            .value.trim();
+        document.getElementById("createUsername").value.trim();
+
+    const email =
+        document.getElementById("createEmail").value.trim();
 
     const password =
-        document.getElementById("createPassword")
-            .value;
+        document.getElementById("createPassword").value;
 
     const confirmPassword =
-        document.getElementById("confirmPassword")
-            .value;
+        document.getElementById("confirmPassword").value;
 
 
-    if (username === "" || password === "") {
+    // Check fields
+
+    if (!username || !email || !password || !confirmPassword) {
 
         showToast("Please fill all fields.");
 
@@ -1539,55 +1588,125 @@ function createAccount(e) {
     }
 
 
-    if (password.length < 4) {
-
-        showToast(
-            "Password must contain at least 4 characters."
-        );
-
-        return;
-    }
-
+    // Check passwords
 
     if (password !== confirmPassword) {
 
-        showToast(
-            "Passwords do not match."
-        );
+        showToast("Passwords do not match.");
 
         return;
     }
 
 
-    const existingAccount =
-        JSON.parse(
-            localStorage.getItem("tourAccount")
-        );
+    // Generate OTP
+
+    pendingOTP = generateOTP();
 
 
-    if (
-        existingAccount &&
-        existingAccount.username.toLowerCase() ===
-        username.toLowerCase()
-    ) {
+    // Temporarily store account
 
-        showToast(
-            "Account already exists. Please login."
-        );
-
-        showLogin();
-
-        return;
-    }
-
-
-    const account = {
+    pendingAccount = {
 
         username: username,
+
+        email: email,
+
         password: password
 
     };
 
+
+    // EmailJS parameters
+
+    const templateParams = {
+
+        to_email: email,
+
+        username: username,
+
+        otp: pendingOTP,
+
+        message: "Please enter this OTP on the Tour website to verify your email."
+
+    };
+
+
+    // Send OTP email
+
+    emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_OTP_TEMPLATE_ID,
+        templateParams
+    )
+
+    .then(function(response) {
+
+        console.log("OTP email sent:", response);
+
+        showToast(
+            "OTP sent successfully to your email!"
+        );
+
+
+        // Show OTP box
+
+        document.getElementById("otpBox").style.display = "block";
+
+
+    })
+
+    .catch(function(error) {
+
+        console.error("EmailJS Error:", error);
+
+        showToast(
+            "Failed to send OTP. Please try again."
+        );
+
+    });
+
+}
+
+// ================= VERIFY OTP =================
+
+function verifyOTP() {
+
+    const enteredOTP =
+        document.getElementById("otpInput").value.trim();
+
+
+    if (!enteredOTP) {
+
+        showToast("Please enter the OTP.");
+
+        return;
+    }
+
+
+    if (enteredOTP !== pendingOTP) {
+
+        showToast("Invalid OTP. Please try again.");
+
+        return;
+    }
+
+
+    // OTP correct
+
+    const account = {
+
+        username: pendingAccount.username,
+
+        email: pendingAccount.email,
+
+        password: pendingAccount.password,
+
+        emailVerified: true
+
+    };
+
+
+    // Save account
 
     localStorage.setItem(
         "tourAccount",
@@ -1595,51 +1714,160 @@ function createAccount(e) {
     );
 
 
-    document.getElementById(
-        "createUsername"
-    ).value = "";
-
-    document.getElementById(
-        "createPassword"
-    ).value = "";
-
-    document.getElementById(
-        "confirmPassword"
-    ).value = "";
-
-
     showToast(
-        "Account created successfully! Please login."
+        "Email verified! Account created successfully."
     );
 
 
-    showLogin();
+    // Clear temporary data
+
+    pendingOTP = "";
+
+    pendingAccount = null;
+
+
+    // Clear form
+
+    document.getElementById("createUsername").value = "";
+
+    document.getElementById("createEmail").value = "";
+
+    document.getElementById("createPassword").value = "";
+
+    document.getElementById("confirmPassword").value = "";
+
+    document.getElementById("otpInput").value = "";
+
+
+    // Hide OTP box
+
+    document.getElementById("otpBox").style.display = "none";
+
+
+    // Go back to login
+
+    setTimeout(function() {
+
+        showLogin();
+
+    }, 1000);
+
+}
+
+// ================= RESEND OTP =================
+
+function resendOTP() {
+
+    if (!pendingAccount) {
+
+        showToast("Please create your account first.");
+
+        return;
+    }
+
+
+    pendingOTP = generateOTP();
+
+
+    const templateParams = {
+
+        to_email: pendingAccount.email,
+
+        username: pendingAccount.username,
+
+        otp: pendingOTP,
+
+        message: "This is your new Tour verification OTP."
+
+    };
+
+
+    emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_OTP_TEMPLATE_ID,
+        templateParams
+    )
+
+    .then(function(response) {
+
+        console.log("OTP resent:", response);
+
+        showToast("New OTP sent to your email.");
+
+    })
+
+    .catch(function(error) {
+
+        console.error("EmailJS Error:", error);
+
+        showToast("Could not resend OTP.");
+
+    });
+
 }
 
 
+// ================= LOGIN SUCCESS EMAIL =================
+function sendLoginSuccessEmail(account, bookingMessage = null) {
+
+    const templateParams = {
+
+        to_email: account.email,
+
+        username: account.username,
+
+        message: bookingMessage ||
+                 "You have successfully logged in to your Tour account."
+
+    };
+
+    emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_LOGIN_TEMPLATE_ID,
+        templateParams
+    )
+    .then(function(response) {
+
+        console.log(
+            "Email sent:",
+            response.status,
+            response.text
+        );
+
+    })
+    .catch(function(error) {
+
+        console.error(
+            "Email error:",
+            error
+        );
+
+    });
+}
+
 /* ================= LOGIN ================= */
+
+// ================= LOGIN =================
 
 function loginUser(e) {
 
     e.preventDefault();
 
 
-    const username =
-        document.getElementById("loginUsername")
-            .value.trim();
+    const email =
+        document.getElementById("loginEmail").value.trim();
 
     const password =
-        document.getElementById("loginPassword")
-            .value;
+        document.getElementById("loginPassword").value;
 
 
-    const account =
-        JSON.parse(
-            localStorage.getItem("tourAccount")
-        );
+    // Get saved account
+
+    const savedAccount =
+        localStorage.getItem("tourAccount");
 
 
-    if (!account) {
+    if (!savedAccount) {
 
         showToast(
             "No account found. Please create an account first."
@@ -1649,54 +1877,82 @@ function loginUser(e) {
     }
 
 
-    if (
-        username === account.username &&
-        password === account.password
-    ) {
-
-        localStorage.setItem(
-            "tourLoggedIn",
-            "true"
-        );
+    const account =
+        JSON.parse(savedAccount);
 
 
-        localStorage.setItem(
-            "tourUsername",
-            account.username
-        );
+    // Check email
 
+    if (email !== account.email) {
 
-        document.getElementById(
-            "loginUsername"
-        ).value = "";
+        showToast("Incorrect email.");
 
-        document.getElementById(
-            "loginPassword"
-        ).value = "";
-
-
-        showToast(
-            "Login successful! Welcome " +
-            account.username
-        );
-
-
-        setTimeout(function () {
-
-            showMainWebsite();
-
-        }, 700);
-
-
-    } else {
-
-        showToast(
-            "Invalid username or password."
-        );
-
+        return;
     }
-}
 
+
+    // Check password
+
+    if (password !== account.password) {
+
+        showToast("Incorrect password.");
+
+        return;
+    }
+
+
+    // Check email verification
+
+    if (account.emailVerified !== true) {
+
+        showToast(
+            "Please verify your email first."
+        );
+
+        return;
+    }
+
+
+    // Login successful
+
+    localStorage.setItem(
+        "tourLoggedIn",
+        "true"
+    );
+
+    localStorage.setItem(
+        "tourUsername",
+        account.username
+    );
+
+
+    // Send successful login email
+
+    sendLoginSuccessEmail(account);
+
+
+    // Clear login fields
+
+    document.getElementById("loginEmail").value = "";
+
+    document.getElementById("loginPassword").value = "";
+
+
+    showToast(
+        "Login successful! Welcome " +
+        account.username
+    );
+
+
+    // Open website
+
+    setTimeout(function() {
+
+        showMainWebsite();
+
+    }, 700);
+
+}
 
 /* ================= SHOW MAIN WEBSITE ================= */
 
