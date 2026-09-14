@@ -8,6 +8,15 @@
     <title>Tour - Travel Website</title>
 
     <link rel="stylesheet" href="style.css">
+    <!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+    emailjs.init({
+        publicKey: "FmQzSIR5XvZQA0ji2"
+    });
+</script>
+
 </head>
 
 <body>
@@ -37,29 +46,29 @@
 
                 <form onsubmit="loginUser(event)">
 
-                    <label>Username</label>
+    <label>Email</label>
 
-                    <input
-                        type="text"
-                        id="loginUsername"
-                        placeholder="Enter your username"
-                        required
-                    >
+    <input
+        type="email"
+        id="loginEmail"
+        placeholder="Enter your email"
+        required
+    >
 
-                    <label>Password</label>
+    <label>Password</label>
 
-                    <input
-                        type="password"
-                        id="loginPassword"
-                        placeholder="Enter your password"
-                        required
-                    >
+    <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter your password"
+        required
+    >
 
-                    <button type="submit" class="auth-button">
-                        Login
-                    </button>
+    <button type="submit" class="auth-button">
+        Login
+    </button>
 
-                </form>
+</form>
 
                 <p class="switch-auth">
                     Don't have an account?
@@ -83,38 +92,76 @@
 
                 <form onsubmit="createAccount(event)">
 
-                    <label>Username</label>
+    <label>Name</label>
 
-                    <input
-                        type="text"
-                        id="createUsername"
-                        placeholder="Create username"
-                        required
-                    >
+    <input
+        type="text"
+        id="createUsername"
+        placeholder="Enter your name"
+        required
+    >
 
-                    <label>Password</label>
+    <label>Email</label>
 
-                    <input
-                        type="password"
-                        id="createPassword"
-                        placeholder="Create password"
-                        required
-                    >
+    <input
+        type="email"
+        id="createEmail"
+        placeholder="Enter your email"
+        required
+    >
 
-                    <label>Confirm Password</label>
+    <label>Password</label>
 
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Confirm password"
-                        required
-                    >
+    <input
+        type="password"
+        id="createPassword"
+        placeholder="Enter password"
+        required
+    >
 
-                    <button type="submit" class="auth-button">
-                        Create Account
-                    </button>
+    <label>Confirm Password</label>
 
-                </form>
+    <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm password"
+        required
+    >
+
+    <!-- OTP BOX -->
+    <div id="otpBox" style="display:none;">
+
+        <label>Enter OTP</label>
+
+        <input
+            type="text"
+            id="otpInput"
+            placeholder="Enter 6-digit OTP"
+            maxlength="6"
+        >
+
+        <button
+            type="button"
+            class="auth-button"
+            onclick="verifyOTP()"
+        >
+            Verify OTP
+        </button>
+
+        <button
+            type="button"
+            onclick="resendOTP()"
+        >
+            Resend OTP
+        </button>
+
+    </div>
+
+    <button type="submit" class="auth-button">
+        Send OTP
+    </button>
+
+</form>
 
                 <p class="switch-auth">
                     Already have an account?
